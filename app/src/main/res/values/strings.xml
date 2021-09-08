@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Lab03 Shared Preferences</string>
+    <string name="top_left">0</string>
+    <string name="top_right">0</string>
+    <string name="bottom_right">0</string>
+    <string name="bottom_left">0</string>
+    <string name="display_count">%2$d</string>
+</resources>
