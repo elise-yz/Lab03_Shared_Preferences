@@ -1,6 +1,7 @@
 package com.zhuelise.lab03sharedpreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,9 +16,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView topLeft;
     Button bottomLeft;
     TextView bottomRight;
-    View.OnClickListener listen;
+    ConstraintLayout layout;
+    View.OnLongClickListener longClick;
     String current;
-    //int topRightCount, topLeftCount, bottomRightCount, bottomLeftCount = 0;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     TextView v;
@@ -34,11 +35,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seekBar = (SeekBar) (findViewById(R.id.seek_bar));
         preferences = getSharedPreferences("com.zhuelise.lab03.sharedpreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
+        layout.setOnLongClickListener(longClick);
         topRight.setOnClickListener(this);
         topLeft.setOnClickListener(this);
         bottomRight.setOnClickListener(this);
         bottomLeft.setOnClickListener(this);
+        setInitialValues();
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                topRight.setTextSize(i);
+                topLeft.setTextSize(i);
+                bottomRight.setTextSize(i);
+                bottomLeft.setTextSize(i);
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     @Override
@@ -52,21 +69,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        setInitialValues();
+    }
+    private void setInitialValues(){
         topLeft.setText(preferences.getString("topLeft", "0"));
         topRight.setText(preferences.getString("topRight", "0"));
         bottomLeft.setText(preferences.getString("bottomLeft", "0"));
         bottomRight.setText(preferences.getString("bottomRight", "0"));
         seekBar.setProgress(preferences.getInt("seekBar", 0));
     }
-
     @Override
     protected void onPause() {
         super.onPause();
-        editor.putString("topLeft", topLeft.getText().toString());
-        editor.putString("topRight", topRight.getText().toString());
+        editor.putString("topLeft", (topLeft.getText().toString()));
+        editor.putString("topRight", (topRight.getText().toString()));
         editor.putString("bottomLeft", bottomLeft.getText().toString());
         editor.putString("bottomRight", bottomRight.getText().toString());
         editor.putInt("seekBar", seekBar.getProgress());
         editor.apply();
     }
+
 }
