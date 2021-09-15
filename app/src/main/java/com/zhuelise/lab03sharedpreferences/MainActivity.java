@@ -11,13 +11,14 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button topRight;
     TextView topLeft;
     Button bottomLeft;
     TextView bottomRight;
     ConstraintLayout layout;
-    View.OnLongClickListener longClick;
     String current;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
@@ -28,19 +29,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        topRight = (Button) (findViewById(R.id.top_right_button));
-        topLeft = (TextView) (findViewById(R.id.top_left_textview));
-        bottomLeft = (Button) (findViewById(R.id.bottom_left_button));
-        bottomRight = (TextView) (findViewById(R.id.bottom_right_textview));
-        seekBar = (SeekBar) (findViewById(R.id.seek_bar));
+        topRight = findViewById(R.id.top_right_button);
+        topLeft = (findViewById(R.id.top_left_textview));
+        bottomLeft = (findViewById(R.id.bottom_left_button));
+        bottomRight = (findViewById(R.id.bottom_right_textview));
+        seekBar = (findViewById(R.id.seek_bar));
+        layout = findViewById(R.id.constraint_layout);
         preferences = getSharedPreferences("com.zhuelise.lab03.sharedpreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
-        layout.setOnLongClickListener(longClick);
         topRight.setOnClickListener(this);
         topLeft.setOnClickListener(this);
         bottomRight.setOnClickListener(this);
         bottomLeft.setOnClickListener(this);
+        layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                editor.clear();
+                setInitialValues();
+                editor.apply();
+                return false;
+            }
+        });
         setInitialValues();
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -54,7 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Snackbar snackbar = Snackbar.make(layout, getString(R.string.font_size, seekBar.getProgress()), Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
         });
     }
 
@@ -76,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         topRight.setText(preferences.getString("topRight", "0"));
         bottomLeft.setText(preferences.getString("bottomLeft", "0"));
         bottomRight.setText(preferences.getString("bottomRight", "0"));
-        seekBar.setProgress(preferences.getInt("seekBar", 0));
+        seekBar.setProgress(preferences.getInt("seekBar", 25));
     }
     @Override
     protected void onPause() {
@@ -88,5 +102,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putInt("seekBar", seekBar.getProgress());
         editor.apply();
     }
-
 }

@@ -5,4 +5,7 @@
     <string name="bottom_right">0</string>
     <string name="bottom_left">0</string>
     <string name="display_count">%1$d</string>
+    <string name="font_size">Font size is now %1$d!</string>
+    <string name="cps_test">Click here to begin the CPS test</string>
+    <string name="cps_display">CPS: 0</string>
 </resources>
