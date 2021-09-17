@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomLeft.setText(preferences.getString("bottomLeft", "0"));
         bottomRight.setText(preferences.getString("bottomRight", "0"));
         seekBar.setProgress(preferences.getInt("seekBar", 25));
+        topRight.setTextSize(seekBar.getProgress());
+        topLeft.setTextSize(seekBar.getProgress());
+        bottomRight.setTextSize(seekBar.getProgress());
+        bottomLeft.setTextSize(seekBar.getProgress());
     }
     @Override
     protected void onPause() {
